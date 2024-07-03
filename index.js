@@ -29,6 +29,7 @@ class sprite {
         }
         this.colour = colour;
         this.isAttacking;
+        this.health = 100;
     }
 
     draw() {
@@ -100,7 +101,7 @@ const enemy = new sprite({
     offset: {
         x: -50,
         y: 0
-    }
+    },
 })
 
 enemy.draw();
@@ -154,16 +155,20 @@ function animate() {
     if (rectangleCollision({
         rectangle1: player, rectangle2: enemy
     }) && player.isAttacking) {
-        console.log('Player Attacked');
+        // console.log('Player Attacked');
         player.isAttacking = false;
+        enemy.health -= 20;
+        document.querySelector('#enemyHealth').style.width = enemy.health + '%';
     }
 
     // If enemy is attacking
     if (rectangleCollision({
         rectangle1: enemy, rectangle2: player
     }) && enemy.isAttacking) {
-        console.log('Enemy Attacked');
+        // console.log('Enemy Attacked');
         enemy.isAttacking = false;
+        player.health -= 20;
+        document.querySelector('#playerHealth').style.width = player.health + '%';
     }
 }
 
