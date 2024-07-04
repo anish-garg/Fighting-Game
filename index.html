@@ -15,17 +15,20 @@
         <div class="absolute flex items-center pt-6">
             <!-- Player health -->
             <div style="width: 440px;" class="relative h-8 flex justify-end">
-                <div style="width: 440px;"  class="bg-yellow-300 h-8"></div>
-                <div style="width: 440px;"  id="playerHealth" class="bg-blue-600 absolute top-0  right-0 bottom-0"></div>
+                <div style="width: 440px;" class="bg-yellow-300 h-8"></div>
+                <div style="width: 440px;" id="playerHealth" class="bg-blue-600 absolute top-0 right-0 bottom-0"></div>
             </div>
             <!-- Timer -->
-            <div class="bg-red-700 w-36 h-28"></div>
+            <div id="timer" class="bg-red-700 w-36 h-28 flex items-center justify-center">10</div>
             <!-- Enemy health -->
             <div style="width: 440px;" class="relative h-8">
-                <div  class="bg-yellow-300 h-8"></div>
+                <div class="bg-yellow-300 h-8"></div>
                 <div id="enemyHealth" class="bg-blue-600 absolute top-0 left-0 right-0 bottom-0"></div>
             </div>
-        </div> 
+        </div>
+        <div></div>
+        <div id="finalVerdict" class="text-white text-xl font-bold absolute flex items-center justify-center inset-0 right-96">
+        </div>
         <canvas></canvas>
     </div>
     <script src="index.js"></script>

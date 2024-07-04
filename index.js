@@ -3,7 +3,7 @@ const c = canvas.getContext('2d');
 
 // Sets the width and height of the canvas
 canvas.width = 1024;
-canvas.height = 514;
+canvas.height = 576;
 
 // Sets the position and colour of the canvas
 c.fillRect(0, 0, canvas.width, canvas.height);
@@ -129,6 +129,34 @@ function rectangleCollision({ rectangle1, rectangle2 }) {
     return rectangle1.attackBox.position.x + rectangle1.attackBox.width >= rectangle2.position.x && rectangle1.attackBox.position.x <= rectangle2.position.x + rectangle2.width && rectangle1.attackBox.position.y + rectangle1.attackBox.height >= rectangle2.position.y && rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height
 }
 
+// For declaring the winner
+function declareWinner({ player, enemy,timerId }) {
+    clearTimeout(timerId);
+    if (player.health == enemy.health) {
+        document.querySelector('#finalVerdict').innerHTML = 'Tie';
+    } else if (player.health > enemy.health) {
+        document.querySelector('#finalVerdict').innerHTML = 'Player 1 wins';
+    } else {
+        document.querySelector('#finalVerdict').innerHTML = 'Player 2 wins';
+    }
+}
+
+// For timer of the game
+let timer = 60;
+let timerId;
+function decrementTimer() {
+    if (timer > 0) {
+        timer--;
+        document.querySelector('#timer').innerHTML = timer;
+        timerId = setTimeout(decrementTimer, 1000);
+    }
+
+    if (timer == 0) {
+        declareWinner({ player, enemy,timerId });
+    }
+}
+decrementTimer();
+
 function animate() {
     // Runs this animate function again and again
     window.requestAnimationFrame(animate);
@@ -169,6 +197,11 @@ function animate() {
         enemy.isAttacking = false;
         player.health -= 20;
         document.querySelector('#playerHealth').style.width = player.health + '%';
+    }
+
+    // If any of the health bar reaches 0
+    if (enemy.health <= 0 || player.health <= 0) {
+        declareWinner({ player, enemy,timerId });
     }
 }
 
