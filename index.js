@@ -10,67 +10,15 @@ c.fillRect(0, 0, canvas.width, canvas.height);
 
 const gravity = 0.7;
 
-class sprite {
-    constructor({ position, velocity, colour, offset }) {
-        this.position = position;
-        this.velocity = velocity;
-        this.width = 50;
-        this.height = 150;
-        this.lastKey;
-        // Creating a attack for the player and enemy,setting its position, width and height
-        this.attackBox = {
-            position: {
-                x: this.position.x,
-                y: this.position.y
-            },
-            offset,
-            width: 100,
-            height: 50
-        }
-        this.colour = colour;
-        this.isAttacking;
-        this.health = 100;
-    }
+const background = new Sprite({
+    position: {
+        x: 0,
+        y: 0
+    },
+    imageSrc:'./assets/background.png'
+})
 
-    draw() {
-        c.fillStyle = this.colour;
-        c.fillRect(this.position.x, this.position.y, this.width, this.height);
-
-        if (this.isAttacking) {
-            c.fillStyle = 'green';
-            c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
-        }
-    }
-
-    // Updates the player and enemy
-    update() {
-        // For drawing them again and again throughout the animation
-        this.draw();
-        // To change the position of enemy's attack box
-        this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
-        this.attackBox.position.y = this.position.y;
-        // For changing the position on y axis and x axis
-        this.position.x += this.velocity.x;
-        this.position.y += this.velocity.y;
-
-        // To make them stop before the canvas ends,so that player and enemy does not cross the canvas
-        if (this.position.y + this.height + this.velocity.y >= canvas.height) {
-            this.velocity.y = 0;
-            //Gravity helps in doing this 
-        } else {
-            this.velocity.y += gravity;
-        }
-    }
-
-    Attack() {
-        this.isAttacking = true;
-        setTimeout(() => {
-            this.isAttacking = false;
-        }, 100);
-    }
-}
-
-const player = new sprite({
+const player = new Fighter({
     position: {
         x: 0,
         y: 0
@@ -88,7 +36,7 @@ const player = new sprite({
 
 player.draw();
 
-const enemy = new sprite({
+const enemy = new Fighter({
     position: {
         x: 400,
         y: 0
@@ -124,37 +72,6 @@ const keys = {
 
 let lastKey;
 
-// For detecting the collision
-function rectangleCollision({ rectangle1, rectangle2 }) {
-    return rectangle1.attackBox.position.x + rectangle1.attackBox.width >= rectangle2.position.x && rectangle1.attackBox.position.x <= rectangle2.position.x + rectangle2.width && rectangle1.attackBox.position.y + rectangle1.attackBox.height >= rectangle2.position.y && rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height
-}
-
-// For declaring the winner
-function declareWinner({ player, enemy,timerId }) {
-    clearTimeout(timerId);
-    if (player.health == enemy.health) {
-        document.querySelector('#finalVerdict').innerHTML = 'Tie';
-    } else if (player.health > enemy.health) {
-        document.querySelector('#finalVerdict').innerHTML = 'Player 1 wins';
-    } else {
-        document.querySelector('#finalVerdict').innerHTML = 'Player 2 wins';
-    }
-}
-
-// For timer of the game
-let timer = 60;
-let timerId;
-function decrementTimer() {
-    if (timer > 0) {
-        timer--;
-        document.querySelector('#timer').innerHTML = timer;
-        timerId = setTimeout(decrementTimer, 1000);
-    }
-
-    if (timer == 0) {
-        declareWinner({ player, enemy,timerId });
-    }
-}
 decrementTimer();
 
 function animate() {
@@ -162,6 +79,7 @@ function animate() {
     window.requestAnimationFrame(animate);
     c.fillStyle = 'black';
     c.fillRect(0, 0, canvas.width, canvas.height);
+    background.update();
     player.update();
     enemy.update();
 
@@ -201,7 +119,7 @@ function animate() {
 
     // If any of the health bar reaches 0
     if (enemy.health <= 0 || player.health <= 0) {
-        declareWinner({ player, enemy,timerId });
+        declareWinner({ player, enemy, timerId });
     }
 }
 
