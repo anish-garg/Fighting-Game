@@ -27,7 +27,7 @@ const shop = new Sprite({
     },
     imageSrc: './assets/shop.png',
     scale: 2.75,
-    framesMax: 6
+    framesMax: 6,
 })
 
 const player = new Fighter({
@@ -43,6 +43,13 @@ const player = new Fighter({
     offset: {
         x: 0,
         y: 0
+    },
+    imageSrc: "./assets/Martial Hero/Idle.png",
+    framesMax: 8,
+    scale:2.5,
+    offset:{
+        x:180,
+        y:157
     }
 })
 
@@ -94,7 +101,7 @@ function animate() {
     background.update();
     shop.update();
     player.update();
-    enemy.update();
+    // enemy.update();
 
 
     player.velocity.x = 0;
