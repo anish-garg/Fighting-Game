@@ -59,6 +59,18 @@ const player = new Fighter({
         run: {
             imageSrc: "./assets/Martial Hero/Run.png",
             framesMax: 8,
+        },
+        jump: {
+            imageSrc: "./assets/Martial Hero/Jump.png",
+            framesMax: 2,
+        },
+        fall: {
+            imageSrc: "./assets/Martial Hero/Fall.png",
+            framesMax: 2,
+        },
+        attack1: {
+            imageSrc: "./assets/Martial Hero/Attack1.png",
+            framesMax: 6,
         }
     }
 })
@@ -76,9 +88,38 @@ const enemy = new Fighter({
     },
     colour: 'red',
     offset: {
-        x: -50,
+        x: 50,
         y: 0
     },
+    imageSrc: "./assets/Martial Hero 2/Idle.png",
+    framesMax: 4,
+    scale: 2.5,
+    offset: {
+        x: -300,
+        y: 167
+    },
+    sprites: {
+        idle: {
+            imageSrc: "./assets/Martial Hero 2/Idle.png",
+            framesMax: 4,
+        },
+        run: {
+            imageSrc: "./assets/Martial Hero 2/Run.png",
+            framesMax: 8,
+        },
+        jump: {
+            imageSrc: "./assets/Martial Hero 2/Jump.png",
+            framesMax: 2,
+        },
+        fall: {
+            imageSrc: "./assets/Martial Hero 2/Fall.png",
+            framesMax: 2,
+        },
+        attack1: {
+            imageSrc: "./assets/Martial Hero 2/Attack1.png",
+            framesMax: 4,
+        }
+    }
 })
 
 enemy.draw();
@@ -111,26 +152,43 @@ function animate() {
     background.update();
     shop.update();
     player.update();
-    // enemy.update();
+    enemy.update();
 
     player.velocity.x = 0;
     enemy.velocity.x = 0;
 
-    // For run animation
-    player.image = player.sprites.idle.image;
-
+    // Player animation like idle, running, jumping, attacking, falling
     if (keys.a.pressed && player.lastKey === 'a') {
         player.velocity.x = -3;
         // For run animation
-        player.image = player.sprites.run.image;
+        player.switchSprite('run');
     } else if (keys.d.pressed && player.lastKey === 'd') {
         player.velocity.x = 3;
-        player.image = player.sprites.run.image;
+        player.switchSprite('run');
+    } else {
+        player.switchSprite('idle');
     }
+
+    if (player.velocity.y < 0) {
+        player.switchSprite('jump');
+    } else if (player.velocity.y > 0) {
+        player.switchSprite('fall');
+    }
+
     if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
         enemy.velocity.x = -3;
+        enemy.switchSprite('run');
     } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
         enemy.velocity.x = 3;
+        enemy.switchSprite('run');
+    }else {
+        enemy.switchSprite('idle');
+    }
+
+    if (enemy.velocity.y < 0) {
+        enemy.switchSprite('jump');
+    } else if (enemy.velocity.y > 0) {
+        enemy.switchSprite('fall');
     }
 
     // If player is attacking
