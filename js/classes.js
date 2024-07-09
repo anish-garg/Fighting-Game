@@ -10,7 +10,7 @@ class Sprite {
         this.framesMax = framesMax
         this.framesCurrent = 0;
         this.framesElapsed = 0;
-        this.framesHold = 5;
+        this.framesHold = 10;
         this.offset = offset;
     }
 
@@ -48,7 +48,7 @@ class Sprite {
 };
 
 class Fighter extends Sprite {
-    constructor({ position, velocity, colour, imageSrc, scale = 1, framesMax = 1, offset = { x: 0, y: 0 } }) {
+    constructor({ position, velocity, colour, imageSrc, scale = 1, framesMax = 1, offset = { x: 0, y: 0 },sprites }) {
         super({
             position,
             imageSrc,
@@ -75,6 +75,12 @@ class Fighter extends Sprite {
         this.colour = colour;
         this.isAttacking;
         this.health = 100;
+        this.sprites = sprites;
+
+        for(const sprite in this.sprites){
+            sprites[sprite].image = new Image();
+            sprites[sprite].image.src = sprites[sprite].imageSrc;
+        }
     }
 
     // Updates the player and enemy
